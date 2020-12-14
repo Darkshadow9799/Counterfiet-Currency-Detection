@@ -6,7 +6,7 @@ def built_model():
     model.add(tf.keras.layers.Conv2D(filters=96,
                                      kernel_size=(11, 11),
                                      strides=4,
-                                     input_shape=(507, 224, 3),
+                                     input_shape=(256, 144, 3),
                                      activation='relu',
                                      padding="same",
                                      name="Layer1"))
@@ -48,13 +48,11 @@ def built_model():
     model.add(tf.keras.layers.Dense(units=4096, name="Dense2"))
     model.add(tf.keras.layers.Dropout(0.5, name="Dropout_Dense2"))
 
-    model.add(tf.keras.layers.Dense(units=2, name="Output"))
+    model.add(tf.keras.layers.Dense(units=4, name="Output"))
 
     model.add(tf.keras.layers.Activation('softmax'))
 
-    model.compile(loss="binary_crossentropy",
-                  optimizer=tf.keras.optimizers.SGD(lr=0.01, momentum=0.9, decay=0.0005),
-                  metrics=['accuracy'])
+
 
     return model
 
