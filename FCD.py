@@ -2,7 +2,7 @@
 
 from tensorflow.keras.layers import Dense,Flatten
 from tensorflow.keras.models import Model
-from tensorflow.keras.applications import ResNet152V2
+from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import CSVLogger,ModelCheckpoint
 from glob import glob
@@ -17,18 +17,18 @@ valid_path='/content/drive/MyDrive/Project/Data/test'
 
 
 # Deep Learning Model
-resnet=ResNet152V2(input_shape=IMAGE_SIZE+[3],weights='imagenet',include_top=False)
+model=MobileNetV2(input_shape=IMAGE_SIZE+[3],weights='imagenet',include_top=False)
 
-for layers in resnet.layers:
+for layers in model.layers:
   layers.trainable=False
 
 folders=glob('/content/drive/MyDrive/Project/Data/train/*')
 
-x=Flatten()(resnet.output)
+x=Flatten()(model.output)
 
 prediction=Dense(len(folders),activation='softmax')(x)
 
-model=Model(inputs=resnet.input,outputs=prediction)
+model=Model(inputs=model.input,outputs=prediction)
 model.compile(optimizer='adam',loss='categorical_crossentropy',metrics=['accuracy'])
 model.summary()
 
@@ -65,7 +65,7 @@ test_set=test_datagen.flow_from_directory(valid_path,
 
 history=model.fit_generator(training_set,
                       validation_data=test_set,
-                      epochs=5,
+                      epochs=50,
                       steps_per_epoch=len(training_set),
                       validation_steps=len(test_set),
                       callbacks=callable_list)
